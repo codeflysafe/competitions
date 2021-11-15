@@ -1,0 +1,13 @@
+__pycache__
+.vscode
+*.xmind
+log/*
+.idea
+.DS_Store
+*.pt
+checkpoints
+pres/data
+data
+nohup.out
+wandb
+predicts
