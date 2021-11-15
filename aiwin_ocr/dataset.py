@@ -2,6 +2,7 @@
 import logging
 import os
 import json
+from PIL.PyAccess import new
 import pandas as pd
 import torch
 import torchvision.utils
@@ -143,6 +144,20 @@ class OcrCollateFn(object):
         self.mean = mean
         self.std = std
     
+    def resize(self,img:Image.Image):
+        w, h = img.size
+        ratio = h/float(self.imgH)
+        w_ = int(w/ratio)
+        if w_ > self.imgW:
+            w_ = self.imgW
+            img = img.resize((w_,self.imgH))
+        elif w_ < self.imgW:
+            img = img.resize((w_,self.imgH))
+            new_img = Image.new('RGB',(self.imgW,self.imgH),color=(255,255,255))
+            new_img.paste(img,((self.imgW - w_)//2, 0))
+            img = new_img
+        return img
+
     def __call__(self, batch):
         if self.mode == 'Test':
             images = batch
@@ -153,9 +168,10 @@ class OcrCollateFn(object):
             for image in images:
                 w,h = image.size
                 max_ratio = max(max_ratio,w/float(h))
-            self.imgW = max(int(max_ratio*self.imgH),self.imgW)
+            self.imgW = int(max_ratio*self.imgH + 0.5)
             #self.imgH = int(max_ratio*self.imgH)
         # print(images)=
+        images = [self.resize(image) for image in images]
         images = [resizeNormalize(image,self.imgH,self.imgW,self.mean,self.std,self.mode == 'Train') for image in images]
         # print(images[0].shape)
         images = torch.stack(images, 0)
