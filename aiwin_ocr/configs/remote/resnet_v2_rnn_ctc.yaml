@@ -10,7 +10,7 @@ base:
    device: 'cpu'
    in_channel: 3
    height: 32
-   width: 100
+   width: 336
    train_rate: 0.9
    train: True
    pretrained: False
@@ -26,14 +26,14 @@ train:
   early_stop: 50
   valid_interval: 2
   epochs: 200
-  keep_ratio: True
+  keep_ratio: False
 
 test:
   batch_size: 32
   input_path: '/Disk/hsj/dataset/2021A_T1_Task1_dataset/test'
   output_path: 'resnet_v2_rnn_ctc'
   multi: True
-  keep_ratio: True
+  keep_ratio: False
 
 base_model: 'CRNN'
 
