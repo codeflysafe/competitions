@@ -134,22 +134,16 @@ class Trainer(object):
     def predict(self,test_load):
         self.net.eval()
         all_preds = []
-        all_reals = []
+        all_reals = test_load.dataset.labels
         with torch.no_grad():
-            for data in tqdm(test_load):
-                images, targets, target_lengths = [d.to(self.device) for d in data]
+            for images in tqdm(test_load):
+                images = images.to(self.device)
                 out = self.net(images)
                 log_probs = F.log_softmax(out, dim=2)
                 preds = ctc_decode(log_probs, method=self.config['loss']['decode_method'], 
                       beam_size=self.config['loss']['beam_size'])
-                target_lengths = target_lengths.cpu().numpy().tolist()
-                reals = targets.cpu().numpy().tolist()
-                target_length_counter = 0
-                for pred,target_length in zip(preds,target_lengths):
-                    real = reals[target_length_counter:target_length_counter + target_length]
-                    target_length_counter += target_length
+                for pred in preds:
                     all_preds.append(self.decode_target(pred))
-                    all_reals.append(self.decode_target(real))
         return all_reals,all_preds
     
     def decode_target(self,sequence):

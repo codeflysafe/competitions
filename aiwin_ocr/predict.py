@@ -35,7 +35,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Train captcha model')
     parser.add_argument('--mode', '--m', type=str,required= False,default= 'local', help='The mode of train')
-    parser.add_argument('--config_path','--c',type=str,required= False,default= 'resnet_rnn_ctc.yaml',help="config path for training")
+    parser.add_argument('--config_path','--c',type=str,required= False,default= 'resnet_v2_rnn_ctc.yaml',help="config path for training")
     args = parser.parse_args()
     config, logger = init(100, f'configs/{args.mode}/{args.config_path}')
     config['base']['train'] = True

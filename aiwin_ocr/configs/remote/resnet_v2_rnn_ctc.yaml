@@ -13,8 +13,8 @@ base:
    width: 336
    train_rate: 0.9
    train: True
-   pretrained: False
-   load_path: ''
+   pretrained: True
+   load_path: 'checkpoints/resnet_v2_rnn_ctc/20211115/20211115_11502_resnet_v2_rnn_ctc.pt'
    characters: '-分仟贰拾玖正角壹柒亿肆捌万佰元叁陆整圆伍零'
 
 train:
@@ -25,7 +25,7 @@ train:
   output_path: ''
   early_stop: 50
   valid_interval: 2
-  epochs: 200
+  epochs: 500
   keep_ratio: False
 
 test:
@@ -56,8 +56,8 @@ optimizer:
   momentum: 0.9
   base_lr: 0.001
   milestones: 
-    - 30
-    - 100
+    - 50
+    - 150
   gamma: 0.1
   
 
