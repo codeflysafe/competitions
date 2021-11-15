@@ -18,7 +18,7 @@ base:
    characters: '-分仟贰拾玖正角壹柒亿肆捌万佰元叁陆整圆伍零'
 
 train:
-  batch_size: 64
+  batch_size: 128
   input_path: '/Disk/hsj/dataset/2021A_T1_Task1_dataset/train'
   multi: True
   checkpoints_path: 'checkpoints/resnet_v2_rnn_ctc'
