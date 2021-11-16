@@ -32,6 +32,7 @@ test:
   batch_size: 32
   input_path: '/Disk/hsj/dataset/2021A_T1_Task1_dataset/test'
   output_path: 'resnet_v2_rnn_ctc'
+  submit_path: '/aiwin/ocr-A/submit/'
   multi: True
   keep_ratio: False
 

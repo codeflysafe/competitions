@@ -9,6 +9,7 @@ from models import Trainer
 import torch.nn as nn
 from tqdm import tqdm
 import pandas as pd
+import json
 
 def main(config:dict,logger:logging):
     # 更新配置文件
@@ -30,6 +31,13 @@ def main(config:dict,logger:logging):
     # 存储结果
     save_path = save_preds(test_pre,reals,preds,images_path,config['test']['output_path'])
     logger.info(f'save predict result in {save_path}!')
+
+    # submit json
+    submit = {real: {'result':pred, 'confidence':0.9} for real, pred in zip(reals, preds)}
+    submit_path = os.path.join(config['test']['submit_path'],'answer.json')
+    with open(submit_path, 'w', encoding='utf-8') as up:
+        json.dump(submit, up, ensure_ascii=False, indent=4)
+
 
 if __name__ == '__main__':
     import argparse

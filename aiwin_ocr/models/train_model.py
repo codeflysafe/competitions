@@ -2,9 +2,6 @@ import logging
 import torch
 import torch.nn.functional as F
 from tqdm import tqdm
-import os
-import time
-import wandb
 import models
 from models.ctc import ctc_decode
 
@@ -29,8 +26,6 @@ class Trainer(object):
         self.eval = eval 
         self.logger = logger
         self.labels2char = labels2char
-        if not self.eval:
-            self.experiment = wandb.init(self.net.name())
         self.load()
     
     def parameters(self):
@@ -75,12 +70,6 @@ class Trainer(object):
              pbar.close()
              self.val_loss.append(total_loss/total_count)
              self.acc.append(total_acc/total_count)
-             self.experiment.log({
-                'val loss': self.val_loss[-1],
-                'val acc':self.acc[-1],
-                'epoch': epoch,
-                'images': wandb.Image(images[0].cpu(),caption=f'Real:{self.decode_target(reals[0:target_lengths[0]])}, Pred:{self.decode_target(preds[0])}'),
-              })
              if self.best_score < self.acc[-1]:
                 self.best_score = self.acc[-1]
                 self.early_stop_count = 0
@@ -110,11 +99,6 @@ class Trainer(object):
         pbar.close()
         scheduler.step()
         self.train_loss.append(total_loss/total_count)
-        self.experiment.log({
-           'train loss':self.train_loss[-1],
-           'epoch': epoch,
-           'lr': scheduler.get_last_lr()[0]
-        })
     
     def save(self):
         save_path = self.net.save()
@@ -143,7 +127,10 @@ class Trainer(object):
                 preds = ctc_decode(log_probs, method=self.config['loss']['decode_method'], 
                       beam_size=self.config['loss']['beam_size'])
                 for pred in preds:
-                    all_preds.append(self.decode_target(pred))
+                    p = self.decode_target(pred)
+                    if p is None:
+                        p = ""
+                    all_preds.append(p)
         return all_reals,all_preds
     
     def decode_target(self,sequence):

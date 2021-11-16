@@ -11,3 +11,5 @@ data
 nohup.out
 wandb
 predicts
+*.json
+*.zip
