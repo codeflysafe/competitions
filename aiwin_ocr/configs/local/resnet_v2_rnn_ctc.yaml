@@ -14,7 +14,7 @@ base:
    train_rate: 0.9
    train: True
    pretrained: True
-   load_path: 'checkpoints/resnet_v2_rnn_ctc/20211115/20211115_11502_resnet_v2_rnn_ctc.pt'
+   load_path: 'checkpoints/resnet_v2_rnn_ctc/20211116/20211116_21666_resnet_v2_rnn_ctc.pt'
    characters: '-分仟贰拾玖正角壹柒亿肆捌万佰元叁陆整圆伍零'
 
 train:
